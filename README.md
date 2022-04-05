@@ -22,9 +22,9 @@ PasswordGenerator.generate(options)
 Options:
 ```elixir
 options = %{
-  "length": "5",
-  "numbers": "false",
-  "symbols": "false",
-  "uppercase": "false"
+  length: "5",
+  numbers: "false",
+  symbols: "false",
+  uppercase: "false"
 }
 ````
