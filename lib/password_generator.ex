@@ -43,14 +43,14 @@ defmodule PasswordGenerator do
 
   @spec generate(options :: map()) :: {:ok, bitstring()} | {:error, bitstring()}
   def generate(options) do
-    result = Map.has_key?(options, :length)
+    result = Map.has_key?(options, "length")
     validate_length(result, options)
   end
 
   defp validate_length(false, _options), do: {:error, "Please provide a length"}
   defp validate_length(true, options) do
     numbers = Enum.map(0..9, & Integer.to_string(&1))
-    length = options[:length]
+    length = options["length"]
     length = String.contains?(length, numbers)
 
     validate_length_is_integer(length, options)
@@ -58,10 +58,10 @@ defmodule PasswordGenerator do
 
   defp validate_length_is_integer(false, _options), do: {:error, "Only integers allowed for length"}
   defp validate_length_is_integer(true, options) do
-    length = options[:length]
+    length = options["length"]
       |> String.trim()
       |> String.to_integer()
-    options_without_length = Map.delete(options, :length)
+    options_without_length = Map.delete(options, "length")
     options_values = Map.values(options_without_length)
     value =
       options_values
@@ -84,7 +84,7 @@ defmodule PasswordGenerator do
         |> String.trim()
         |> String.to_existing_atom()
     end)
-      |> Enum.map(fn {key, _value} -> key end)
+      |> Enum.map(fn {key, _value} -> String.to_atom(key) end)
   end
 
   defp validate_options(false, _length, _options), do: {:error, "Invalid options"}
@@ -124,7 +124,7 @@ defmodule PasswordGenerator do
   end
 
   defp get(:symbols) do
-    String.split("!#$%&()+,-./:;<=>?@[]^_{|}~", "", trim: true)
+    Enum.random(String.split("!#$%&()+,-./:;<=>?@[]^_{|}~", "", trim: true))
   end
 
   defp get(:numbers) do
